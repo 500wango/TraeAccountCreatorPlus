@@ -1,5 +1,8 @@
 # TraeAccountCreatorPlus
-S-Trespassing/Trae-Account-Creator 的复活+小幅改进版。
+S-Trespassing/Trae-Account-Creator 的小幅修改版。
+
+删了周年礼包获取，删减了一些print，从mail.cx迁移到temporam，添加真·五光十色的输出，，别的修改点忘了。
+
 基于 Playwright + 临时邮箱，支持单账号注册与批量并发注册，并在完成后导出账号信息和 Cookie。
 
 使用方法
