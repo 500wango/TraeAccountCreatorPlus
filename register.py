@@ -10,9 +10,10 @@ import sys
 from turtle import back
 from httpx import ReadTimeout
 from playwright.async_api import async_playwright
-from mail_client import AsyncMailClient
+from mail_client import AsyncMailClient, check_api_key
 from colorama import Fore, Style,Back
 from colorama import init as coloinit
+import httpx
 
 coloinit(autoreset=True)
 #颜色列表
@@ -37,10 +38,30 @@ async def save_account(email, password):
         f.write(f"{email}    {password}\n")
     #print(f"账号已保存到: {ACCOUNTS_FILE}")
 
+async def check_network():
+    """检查网络连接（访问Google）"""
+    test_urls = [
+        "https://www.google.com",
+        "https://www.youtube.com"
+    ]
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        for url in test_urls:
+            try:
+                response = await client.get(url, follow_redirects=True)
+                if response.status_code == 200:
+                    return True
+            except Exception:
+                input("")
+                continue
+    return False
+
 async def run_registration(CD,thread_num):
     global colors
     print(colors[thread_num-1] + "开始单账号注册流程...")
-
+    
+    # 检查 API_KEY
+    if not check_api_key():
+        return
     
     #依据CD计算重试次数
     total_duration = 60
@@ -173,6 +194,18 @@ async def run_registration(CD,thread_num):
 
 async def run_batch(total, concurrency, mailsCheckCD):
     global colors
+    
+    # 检查 API_KEY
+    if not check_api_key():
+        return
+    
+    # 检查网络连接（只检查一次）
+    print("检查网络连接...")
+    if not await check_network():
+        print("必须挂VPN，否则连不上trae国际版服务器！")
+        return
+    print("网络连接正常\n")
+    
     if total <= 0:
         print("批量注册数量必须大于 0。")
         return

@@ -1,3 +1,25 @@
+
+# ——————Config——————
+API_BASE_URL = "https://api.temporam.com/v1"
+API_KEY = ""#自行填入
+ #   https://temporam.com/zh/dashboard
+# ——————————————————
+
+def check_api_key():
+    """检查API_KEY是否已填写"""
+    if not API_KEY or API_KEY.strip() == "":
+        print("=" * 60)
+        print("[错误] API_KEY 未填写！")
+        print("=" * 60)
+        print("请按以下步骤获取并填写 API Key：")
+        print("1. 访问 https://temporam.com/zh/dashboard")
+        print("2. 注册/登录账号")
+        print("3. 在控制台中创建 API Key（名称随意）并获取")
+        print(f"4. 打开 mail_client.py 文件，将刚才获取到的API Key粘贴进mail_client第四行")
+        print("=" * 60)
+        return False
+    return True
+
 import httpx
 import random
 import string
@@ -6,12 +28,6 @@ import asyncio
 import configparser
 import os
 import json
-
-# Config
-API_BASE_URL = "https://api.temporam.com/v1"
-API_KEY = ""#自行填入
-
-#https://temporam.com/zh/dashboard
 
 ERROR_MESSAGES = {
     400: "请求参数无效",
